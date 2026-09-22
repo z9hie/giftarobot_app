@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -15,7 +16,6 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            /* Фон как на giftlogo1.png: от #0B0E14 к #43557A */
             background: linear-gradient(160deg, #0B0E14 0%, #43557A 100%);
             background-attachment: fixed;
             color: #ffffff;
@@ -60,22 +60,15 @@
             display: inline-block;
         }
 
-        .hat {
+        /* Lottie-анимация на месте буквы A */
+        .hat-lottie {
             position: absolute;
             top: -24px;
             left: 50%;
             transform: translateX(-50%);
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             pointer-events: none;
-        }
-
-        .hat img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            /* Убираем белый фон через mix-blend-mode */
-            mix-blend-mode: normal;
             filter: drop-shadow(0 4px 12px rgba(124, 92, 255, 0.5));
         }
 
@@ -106,9 +99,7 @@
             line-height: 1.6;
         }
 
-        /* ==========================================
-           АДАПТАЦИЯ ПОД ПК
-           ========================================== */
+        /* Адаптация под ПК */
         @media (min-width: 768px) {
             .app {
                 max-width: 480px;
@@ -121,16 +112,14 @@
                 font-size: 34px;
             }
 
-            .hat {
-                width: 50px;
-                height: 50px;
+            .hat-lottie {
+                width: 54px;
+                height: 54px;
                 top: -28px;
             }
         }
 
-        /* ==========================================
-           АДАПТАЦИЯ ПОД IPHONE (вырез, скругления)
-           ========================================== */
+        /* Адаптация под iPhone */
         @supports (padding: max(0px)) {
             .app {
                 padding-top: max(env(safe-area-inset-top), 12px);
@@ -138,9 +127,7 @@
             }
         }
 
-        /* ==========================================
-           АДАПТАЦИЯ ПОД ANDROID (высокие экраны)
-           ========================================== */
+        /* Адаптация под Android (низкие экраны) */
         @media (max-height: 700px) {
             .header {
                 padding: 20px 20px 8px;
@@ -150,9 +137,9 @@
                 font-size: 26px;
             }
 
-            .hat {
-                width: 38px;
-                height: 38px;
+            .hat-lottie {
+                width: 40px;
+                height: 40px;
                 top: -20px;
             }
         }
@@ -162,7 +149,7 @@
     <div class="app">
         <header class="header">
             <h1 class="logo">
-                Gift<span class="logo-a">A<span class="hat"><img src="img/witchhat.png" alt=""></span></span>Robot
+                Gift<span class="logo-a">A<span class="hat-lottie" id="hat-lottie"></span></span>Robot
             </h1>
         </header>
 
@@ -174,12 +161,12 @@
     </div>
 
     <script>
+        // Telegram WebApp
         const tg = window.Telegram?.WebApp;
         if (tg) {
             tg.ready();
             tg.expand();
 
-            // На десктопе — полный экран
             if (typeof tg.requestFullscreen === 'function') {
                 tg.requestFullscreen();
             }
@@ -187,6 +174,18 @@
             if (tg.setHeaderColor) tg.setHeaderColor('#0B0E14');
             if (tg.setBackgroundColor) tg.setBackgroundColor('#0B0E14');
             if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+        }
+
+        // Lottie-анимация шляпы
+        const hatContainer = document.getElementById('hat-lottie');
+        if (hatContainer && window.lottie) {
+            lottie.loadAnimation({
+                container: hatContainer,
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: 'img/witchhat.json'  // путь к твоему Lottie-файлу
+            });
         }
     </script>
 </body>
